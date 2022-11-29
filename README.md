@@ -1,5 +1,5 @@
 # openexr
-Rez package for OpenEXR
+Rez package for OpenEXR static libraries
 
 # Install
 With rez:

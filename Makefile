@@ -21,6 +21,9 @@ PREFIX ?= ${REZ_BUILD_INSTALL_PATH}
 
 # CMake Arguments
 CMAKE_ARGS := -DCMAKE_INSTALL_PREFIX=$(PREFIX) \
+	-DOPENEXR_FORCE_INTERNAL_IMATH=ON \
+	-DOPENEXR_FORCE_INTERNAL_ZLIB=ON \
+	-DBUILD_SHARED_LIBS=OFF \
 	-DCMAKE_BUILD_TYPE=$(BUILD_TYPE) \
 	-DCMAKE_SKIP_RPATH=ON
 
@@ -45,12 +48,14 @@ build: $(SOURCE_DIR) # Checkout the correct tag and build
 	cd $(SOURCE_DIR) && git checkout $(TAG)
 	cd $(BUILD_DIR) && cmake $(CMAKE_ARGS) $(SOURCE_DIR) && make
 
-
 install: build
+	cd $(BUILD_DIR) && make install
+
+install: install
 	mkdir -p $(PREFIX)
 	cd $(BUILD_DIR) && make install
 
-test: build # Run the tests in the build
+test: build_shared # Run the tests in the build
 	$(MAKE) -C $(BUILD_DIR) test
 
 clean:
